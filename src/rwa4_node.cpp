@@ -457,8 +457,6 @@ int main(int argc, char ** argv) {
                                     gantry.pickPart(faulty_part);
                                     gantry.goToPresetLocation(gantry.agv2_drop_);
                                     gantry.deactivateGripper("left_arm");
-                                    ROS_INFO_STREAM(
-                                            "BLack Sheeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep MEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEHHHHHHHHHHHHHHHHHHHHH");
                                     ROS_INFO_STREAM("Go to Loop2 triggered");
                                     //                                        parts_from_camera_main = comp.get_parts_from_camera();
                                     goto LOOP2;
@@ -539,8 +537,6 @@ int main(int argc, char ** argv) {
                                     gantry.pickPart(faulty_part);
                                     gantry.goToPresetLocation(gantry.agv2_drop_);
                                     gantry.deactivateGripper("left_arm");
-                                    ROS_INFO_STREAM(
-                                            "BLack Sheeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep MEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEHHHHHHHHHHHHHHHHHHHHH");
                                     ROS_INFO_STREAM("Go to Loop2 triggered");
                                     //                                        parts_from_camera_main = comp.get_parts_from_camera();
                                     goto LOOP2;
@@ -658,8 +654,6 @@ int main(int argc, char ** argv) {
                                     gantry.pickPart(faulty_part);
                                     gantry.goToPresetLocation(gantry.agv2_drop_);
                                     gantry.deactivateGripper("left_arm");
-                                    ROS_INFO_STREAM(
-                                            "BLack Sheeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep MEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEHHHHHHHHHHHHHHHHHHHHH");
                                     ROS_INFO_STREAM("Go to Loop2 triggered");
                                     //                                        parts_from_camera_main = comp.get_parts_from_camera();
                                     goto LOOP2;
@@ -758,8 +752,6 @@ int main(int argc, char ** argv) {
                                     gantry.pickPart(faulty_part);
                                     gantry.goToPresetLocation(gantry.agv2_drop_);
                                     gantry.deactivateGripper("left_arm");
-                                    ROS_INFO_STREAM(
-                                            "BLack Sheeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep MEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEHHHHHHHHHHHHHHHHHHHHH");
                                     ROS_INFO_STREAM("Go to Loop2 triggered");
                                     //                                        parts_from_camera_main = comp.get_parts_from_camera();
                                     goto LOOP2;
@@ -916,8 +908,6 @@ int main(int argc, char ** argv) {
                                     gantry.pickPart(faulty_part);
                                     gantry.goToPresetLocation(gantry.agv2_drop_);
                                     gantry.deactivateGripper("left_arm");
-                                    ROS_INFO_STREAM(
-                                            "BLack Sheeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep MEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEHHHHHHHHHHHHHHHHHHHHH");
                                     ROS_INFO_STREAM("Go to Loop2 triggered");
                                     //                                        parts_from_camera_main = comp.get_parts_from_camera();
                                     goto LOOP2;
@@ -969,7 +959,6 @@ int main(int argc, char ** argv) {
     ros::Duration timeout(5.0);
     if((i > 1) && (temp!= i-2))
     {
-        ROS_INFO_STREAM("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
         i = i-2;
         k = 0;
         ROS_INFO_STREAM("Executing Order = " << i-1);
@@ -979,7 +968,6 @@ int main(int argc, char ** argv) {
     }
 
 //    submitOrder(2, "order_0_shipment_0");
-    ROS_INFO_STREAM("Mangathaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa DaWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
 
     comp.endCompetition();
     spinner.stop();
