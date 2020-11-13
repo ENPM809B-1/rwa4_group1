@@ -568,6 +568,7 @@ int main(int argc, char ** argv) {
                                 part_in_tray.pose.orientation.y = master_vector_main[i][j][k].place_part_pose.orientation.y;
                                 part_in_tray.pose.orientation.z = master_vector_main[i][j][k].place_part_pose.orientation.z;
                                 part_in_tray.pose.orientation.w = master_vector_main[i][j][k].place_part_pose.orientation.w;
+                                part_in_tray.initial_pose = parts_from_camera_main[l][m].pose;
 
                                 ROS_INFO_STREAM("Printing World coordinates where the parts has to be placed for AGV 2");
                                 ROS_INFO_STREAM(gantry.getTargetWorldPose(part_in_tray.pose, "agv2"));
@@ -625,14 +626,14 @@ int main(int argc, char ** argv) {
                                     ROS_INFO_STREAM("AGV1 location reached");
                                 }
 
-                                //Fixing part pose if gripper is Faulty
-                                fix_part_pose(comp, master_vector_main[i][j][k], gantry, part_in_tray);
-
-                                // Checking if parts have arrived on conveyor belt
-                                if((comp.conveyor_belt_part_status == true) && (conveyor_part_picked == false))
-                                {
-                                    pick_part_from_conveyor(comp, gantry);
-                                }
+//                                //Fixing part pose if gripper is Faulty
+//                                fix_part_pose(comp, master_vector_main[i][j][k], gantry, part_in_tray);
+//
+//                                // Checking if parts have arrived on conveyor belt
+//                                if((comp.conveyor_belt_part_status == true) && (conveyor_part_picked == false))
+//                                {
+//                                    pick_part_from_conveyor(comp, gantry);
+//                                }
 
                                 faulty_part = comp.get_quality_sensor_status();
                                 ROS_INFO_STREAM("Status of faulty part = ");

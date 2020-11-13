@@ -4,6 +4,26 @@
 #include <tf2_ros/static_transform_broadcaster.h>
 #include <geometry_msgs/TransformStamped.h>
 
+
+Quat GantryControl::ToQuaternion(double roll, double pitch, double yaw) // yaw (Z), pitch (Y), roll (X)
+{
+    // Abbreviations for the various angular functions
+    double cy = cos(yaw * 0.5);
+    double sy = sin(yaw * 0.5);
+    double cp = cos(pitch * 0.5);
+    double sp = sin(pitch * 0.5);
+    double cr = cos(roll * 0.5);
+    double sr = sin(roll * 0.5);
+
+    Quat q;
+    q.w = cr * cp * cy + sr * sp * sy;
+    q.x = sr * cp * cy - cr * sp * sy;
+    q.y = cr * sp * cy + sr * cp * sy;
+    q.z = cr * cp * sy - sr * sp * cy;
+
+    return q;
+}
+
 GantryControl::GantryControl(ros::NodeHandle & node):
         node_("/ariac/gantry"),
         planning_group_ ("/ariac/gantry/robot_description"),
@@ -613,22 +633,101 @@ bool GantryControl::pickPart(part part){
 //    ros::waitForShutdown();
 }
 
-void GantryControl::placePart(part part, std::string agv){
-    geometry_msgs::Pose target_pose_in_tray = getTargetWorldPose(part.pose, agv);
 
+//void GantryControl::placePart(part part, std::string agv){
+//    geometry_msgs::Pose target_pose_in_tray = getTargetWorldPose(part.pose, agv);
+//
+//    if(agv == "agv2") {
+//        goToPresetLocation(agv2_);
+//    }
+//    else
+//        goToPresetLocation(agv1_);
+//
+//    target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5 * model_height[part.type]);
+//
+//    ROS_INFO_STREAM("target_pose_in_tray = " << target_pose_in_tray);
+//    left_arm_group_.setPoseTarget(target_pose_in_tray);
+//    left_arm_group_.move();
+//    deactivateGripper("left_arm");
+//}
+
+
+//void GantryControl::placePart(part part, std::string agv){
+//
+//    geometry_msgs::Pose target_pose_in_tray = getTargetWorldPose(part.pose, agv);
+//
+//    if(agv == "agv2") {
+//        goToPresetLocation(agv2_);
+//    }
+//    else
+//        goToPresetLocation(agv1_);
+//
+//    target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5 * model_height[part.type]);
+//
+//    ROS_INFO_STREAM("target_pose_in_tray = " << target_pose_in_tray);
+//    left_arm_group_.setPoseTarget(target_pose_in_tray);
+//    left_arm_group_.move();
+//    deactivateGripper("left_arm");
+//}
+
+void GantryControl::placePart(part part, std::string agv){
+    geometry_msgs::Pose initial_pose, final_pose;
+
+    initial_pose = part.initial_pose;
+    final_pose = getTargetWorldPose(part.pose, agv);
+
+    // Orientation quaternion
+    tf2::Quaternion q1(
+            initial_pose.orientation.x,
+            initial_pose.orientation.y,
+            initial_pose.orientation.z,
+            initial_pose.orientation.w);
+    tf2::Quaternion q2(
+            final_pose.orientation.x,
+            final_pose.orientation.y,
+            final_pose.orientation.z,
+            final_pose.orientation.w);
+
+    // 3x3 Rotation matrix from quaternion
+    tf2::Matrix3x3 m(q1);
+    tf2::Matrix3x3 m1(q2);
+
+    // Roll Pitch and Yaw from rotation matrix
+    double initial_roll, initial_pitch, initial_yaw, final_roll, final_pitch, final_yaw, target_roll, target_pitch, target_yaw;
+    m.getRPY(initial_roll, initial_pitch, initial_yaw);
+    m1.getRPY(final_roll, final_pitch, final_yaw);
+
+
+    target_roll = final_roll - initial_roll;
+    target_pitch =  final_pitch - initial_pitch;
+
+//    target_yaw =  final_yaw - (initial_yaw - 3.08) + 3.14; // Accouting for 180 degree spin by gantry // 0 degree (3.14)
+
+//    target_yaw =  -(final_yaw - (initial_yaw - 3.08) + 3.14) - 2.36; // Accouting for 180 degree spin by gantry // 0 degree (-3.14)
+
+    target_yaw =  -(final_yaw - (initial_yaw - 3.2) + 3.14) - 2.36;
+
+    auto final_pose_ = ToQuaternion(target_roll, target_pitch, target_yaw);
+    final_pose.orientation.x = final_pose_.x;
+    final_pose.orientation.y = final_pose_.y;
+    final_pose.orientation.z = final_pose_.z;
+    final_pose.orientation.w = final_pose_.w;
+
+    geometry_msgs::Pose target_pose_in_tray = final_pose;
     if(agv == "agv2") {
         goToPresetLocation(agv2_);
     }
-    else
+    else{
         goToPresetLocation(agv1_);
+        ROS_INFO_STREAM("AGV Location Reached");
+    }
 
     target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5 * model_height[part.type]);
+    ROS_INFO_STREAM("target_pose_in_tray = " << target_pose_in_tray);
     left_arm_group_.setPoseTarget(target_pose_in_tray);
     left_arm_group_.move();
     deactivateGripper("left_arm");
-//    auto state = getGripperState("left_arm");
-//    if (state.attached)
-//        goToPresetLocation(start_);
+
 }
 
 void GantryControl::goToPresetLocation(PresetLocation location) {

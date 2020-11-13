@@ -57,10 +57,15 @@ typedef struct PresetLocation {
     std::vector<double> right_arm;
 } start, bin3, bin16, bin13, shelf5, agv2, agv2_drop, shelf5, waypoint_1, waypoint_2, waypoint_3, waypoint_4,pose_change, flip_target, agv2_flip;
 
+typedef struct Quaternion
+{
+    double w, x, y, z;
+} Quat;
 
 typedef struct Part {
   std::string type; // model type
   geometry_msgs::Pose pose; // model pose (in frame)
+  geometry_msgs::Pose initial_pose;
   geometry_msgs::Pose save_pose;
   std::string frame; // model frame (e.g., "logical_camera_1_frame")
   ros::Time time_stamp;

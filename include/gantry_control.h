@@ -42,6 +42,7 @@
 class GantryControl {
 
   public:
+    Quat ToQuaternion(double roll, double pitch, double yaw);
     GantryControl(ros::NodeHandle & node);
 
     void init();
